@@ -24,16 +24,11 @@ class Listener:
             print("Audio status:", status)
         self.audio_queue.put(bytes(indata))
 
-    def listen(self):
+    def listen(self) -> str:
         print("Listening...")
         while True:
             if not self.audio_queue.empty():
                 data = self.audio_queue.get()
                 if self.recognizer.AcceptWaveform(data):
                     result = json.loads(self.recognizer.Result())
-                    if "stop" in result.get('text'):
-                        print("Stopping listener.")
-                        break
-                else:
-                    partial_result = json.loads(self.recognizer.PartialResult())
-                    print("Partial result:", partial_result.get('partial', ''))
+                    return result.get('text', '')

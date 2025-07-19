@@ -1,3 +1,4 @@
 models/*
 !models/.gitkeep
 core/__pycache__/
+test.py
