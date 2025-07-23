@@ -1,8 +1,8 @@
 import json
 import logging.config
-from typing import cast, TYPE_CHECKING
 import atexit
 import pathlib
+from typing import cast, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from utils.logger import QueueHandlerWithListener

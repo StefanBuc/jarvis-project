@@ -3,9 +3,11 @@ import queue
 import sounddevice
 import os
 import json
+from utils.logger import Logger
 
 class Listener:
     def __init__(self, model_path = os.path.join(os.path.dirname(__file__), "../models/vosk-model-en-us-0.22")):
+        self.logger = Logger().get_logger()
         self.model = Model(model_path)
         self.recognizer = KaldiRecognizer(self.model, 16000)
         self.recognizer.SetWords(True)
@@ -21,14 +23,15 @@ class Listener:
 
     def audio_callback(self, indata, frames, time, status):
         if status:
-            print("Audio status:", status)
+            self.logger.warning(f"Audio callback status: {status}")
         self.audio_queue.put(bytes(indata))
 
     def listen(self) -> str:
-        print("Listening...")
+        self.logger.info("Starting to listen for audio input...")
         while True:
             if not self.audio_queue.empty():
                 data = self.audio_queue.get()
                 if self.recognizer.AcceptWaveform(data):
                     result = json.loads(self.recognizer.Result())
+                    self.logger.info(f"Recognition result: {result}")
                     return result.get('text', '')
