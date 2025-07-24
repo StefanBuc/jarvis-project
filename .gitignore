@@ -4,3 +4,6 @@ test.py
 *.log
 !logs/.gitkeep
 __pycache__
+output/*
+!output/.gitkeep
+*.env

@@ -1,0 +1,31 @@
+phrase,intent
+what's the weather like today,get_weather
+do I need an umbrella,get_weather
+tell me the forecast,get_weather
+is it going to rain,get_weather
+what's the temperature outside,get_weather
+how's the weather looking,get_weather
+tell me a joke,tell_joke
+make me laugh,tell_joke
+give me something funny,tell_joke
+say something hilarious,tell_joke
+I want to hear a joke,tell_joke
+do you know any jokes,tell_joke
+what time is it,get_time
+tell me the time,get_time
+do you know the time,get_time
+give me the current time,get_time
+what's the time right now,get_time
+can you check the time,get_time
+stop listening,stop
+turn off,stop
+shut down,stop
+that's enough,stop
+please stop,stop
+quit now,stop
+search wikipedia for gravity,wikipedia
+look up black holes on wikipedia,wikipedia
+find information about Canada,wikipedia
+what does wikipedia say about evolution,wikipedia
+can you wikipedia the Eiffel Tower,wikipedia
+get me a wikipedia article on quantum physics,wikipedia
