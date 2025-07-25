@@ -6,8 +6,8 @@ import json
 from utils.logger import Logger
 
 class Listener:
-    def __init__(self, model_path = os.path.join(os.path.dirname(__file__), "../models/vosk-model-en-us-0.22")):
-        self.logger = Logger().get_logger()
+    def __init__(self, logger: Logger, model_path = os.path.join(os.path.dirname(__file__), "../models/vosk-model-en-us-0.22")):
+        self.logger = logger.get_logger()
         self.model = Model(model_path)
         self.recognizer = KaldiRecognizer(self.model, 16000)
         self.recognizer.SetWords(True)
@@ -35,3 +35,9 @@ class Listener:
                     result = json.loads(self.recognizer.Result())
                     self.logger.info(f"Recognition result: {result}")
                     return result.get('text', '')
+
+    def stop(self):
+        self.logger.info("Stopping audio stream...")
+        self.stream.stop()
+        self.stream.close()
+        self.logger.info("Audio stream stopped.")

@@ -10,17 +10,26 @@ if TYPE_CHECKING:
 class Logger:
     def __init__(self):
         self.logger = logging.getLogger("Jarvis")
+        self.queue_hander = None
+        self.listener = None
         config_file = pathlib.Path("config/logging.json")
         with open(config_file, 'r') as file:
             config = json.load(file)
         logging.config.dictConfig(config)
-        queue_handler = logging.getHandlerByName("queue_handler")
-        if queue_handler is not None:
-            queue_handler = cast("QueueHandlerWithListener", queue_handler)
-            queue_handler.listener.start()
-            atexit.register(queue_handler.listener.stop)
+        self.queue_handler = logging.getHandlerByName("queue_handler")
+        if self.queue_handler is not None:
+            self.queue_handler = cast("QueueHandlerWithListener", self.queue_handler)
+            self.listener = self.queue_handler.listener
+            if self.listener is not None:
+                self.listener.start()
+        
 
     def get_logger(self):
         return self.logger
+
+    def shutdown(self):
+        if self.listener is not None:
+            self.listener.stop()
+        logging.shutdown()
     
         

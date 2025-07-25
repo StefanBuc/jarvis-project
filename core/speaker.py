@@ -2,12 +2,12 @@ import pyttsx3
 from utils.logger import Logger
 
 class Speaker:
-    def __init__(self, rate=200, voice=None, volume=1.0):
+    def __init__(self, logger: Logger, rate=200, voice=None, volume=1.0):
         self.engine = pyttsx3.init()
         self.engine.setProperty('rate', rate)
         self.engine.setProperty('voice', voice)
         self.engine.setProperty('volume', volume)
-        self.logger = Logger().get_logger()
+        self.logger = logger.get_logger()
         self.logger.info(f"Speaker initialized with rate: {rate}, voice: {voice}, volume: {volume}")
 
     def speak(self, text):

@@ -3,11 +3,11 @@ import torch
 from utils.logger import Logger
 
 class Brain:
-    def __init__(self, model_path: str = "output/model", tokenizer_path: str = "output/tokenizer"):
+    def __init__(self, logger: Logger, model_path: str = "output/model", tokenizer_path: str = "output/tokenizer"):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
         self.model = BertForSequenceClassification.from_pretrained(model_path)
         self.model.eval()
-        self.logger = Logger().get_logger()
+        self.logger = logger.get_logger()
         self.logger.info("Brain initialized with model and tokenizer.")
         
 

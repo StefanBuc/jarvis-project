@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 
 
 class CommandHandler:
-    def __init__(self):
+    def __init__(self, logger: Logger):
         load_dotenv()
-        self.logger = Logger().get_logger()
+        self.logger = logger.get_logger()
         self.weather_api_key = os.getenv("WEATHER_API_KEY")
 
     def handle_command(self, command: dict) -> str:
@@ -26,7 +26,7 @@ class CommandHandler:
             }
             response = requests.get(url=url, params=params)
             data = response.json()
-            return f"Current temperature in Toronto: {data['current']['temp_c']}°C"
+            return f"Current temperature in Toronto is {data['current']['temp_c']}°C"
         elif command == "search_wikipedia":
             try:
                 summary = wikipedia.summary(command.get('query', ''), sentences=2)
