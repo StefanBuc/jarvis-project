@@ -15,10 +15,12 @@ class CommandHandler:
 
     def handle_command(self, command: dict) -> str:
         self.logger.info(f"Handling command: {command}")
+        intent = command.get("intent")
+        text = command.get("text", "").lower()
 
-        if command == "get_time":
-            return f"The current time is {datetime.datetime.now().strftime('%H:%M:%S')}."
-        elif command == "get_weather":
+        if intent == "get_time":
+            return f"The current time is {datetime.datetime.now().strftime('%I:%M%p')}."
+        elif intent == "get_weather":
             url = "http://api.weatherapi.com/v1/current.json"
             params = {
                 "key": self.weather_api_key,
@@ -27,11 +29,13 @@ class CommandHandler:
             response = requests.get(url=url, params=params)
             data = response.json()
             return f"Current temperature in Toronto is {data['current']['temp_c']}°C"
-        elif command == "search_wikipedia":
+        elif intent == "wikipedia":
             try:
-                summary = wikipedia.summary(command.get('query', ''), sentences=2)
+                summary = wikipedia.summary(text.replace("wikipedia", ""), sentences=2)
+                self.logger.info(f"Wikipedia summary retrieved: {summary}")
                 return f"Wikipedia summary: {summary}"
-            except:
-                return "Could not retrieve Wikipedia summary. Please check your query."
+            except Exception as e:
+                self.logger.error(f"Error retrieving Wikipedia summary. {e}")
+                return "Could not retrieve Wikipedia summary."
         else:
-            return "Unknown command."
+            return "Sorry, I don't understand that command."

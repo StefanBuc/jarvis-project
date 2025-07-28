@@ -9,7 +9,7 @@ class Listener:
     def __init__(self, logger: Logger, model_path = os.path.join(os.path.dirname(__file__), "../models/vosk-model-en-us-0.22")):
         self.logger = logger.get_logger()
         self.model = Model(model_path)
-        self.recognizer = KaldiRecognizer(self.model, 16000)
+        self.recognizer = KaldiRecognizer(self.model, 16000, open("config/keywords.list").read())
         self.recognizer.SetWords(True)
         self.audio_queue = queue.Queue()
         
@@ -36,6 +36,18 @@ class Listener:
                     self.logger.info(f"Recognition result: {result}")
                     return result.get('text', '')
 
+    def listen_for_wake_word(self, wake_word: str) -> bool:
+        self.logger.info(f"Listening for wake word: {wake_word}")
+        while True:
+            if not self.audio_queue.empty():
+                data = self.audio_queue.get()
+                if self.recognizer.AcceptWaveform(data):
+                    result = json.loads(self.recognizer.Result())
+                    text = result.get('text', '')
+                    if wake_word.lower() in text.lower():
+                        self.logger.info(f"Wake word '{wake_word}' detected.")
+                        return True
+                    
     def stop(self):
         self.logger.info("Stopping audio stream...")
         self.stream.stop()

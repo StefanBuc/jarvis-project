@@ -15,16 +15,18 @@ print("Jarvis is ready to listen...")
 
 try:
     while True:
-
-        phrase = listener.listen()
-        command = brain.proccess_command(phrase)
-        response = command_handler.handle_command(command)
-        if command == "stop":
-            logger.info("Stopping listener as per command.")
-            break
-        
-        speaker.speak(response)
-        logger.info(f"Command processed: {command}, Response: {response}")
+        if listener.listen_for_wake_word("jarvis"):
+            logger.info("Wake word detected, listening for command...")
+            speaker.speak("Yes?")
+            phrase = listener.listen()
+            command = brain.proccess_command(phrase)
+            response = command_handler.handle_command(command)
+            if command["text"] == "stop":
+                logger.info("Stopping listener as per command.")
+                break
+            
+            speaker.speak(response)
+            logger.info(f"Command processed: {command}, Response: {response}")
 
 finally:
     logger.info("Shutting down.")

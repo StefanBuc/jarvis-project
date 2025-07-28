@@ -20,4 +20,8 @@ class Brain:
         predicted_label_id = torch.argmax(logits, dim=1).item()
         intent = self.model.config.id2label[predicted_label_id]
         self.logger.info(f"Predicted intent: {intent} for command: {command}")
-        return intent
+        
+        return {"intent": intent,
+                "text": command
+                }
+    
