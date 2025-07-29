@@ -37,5 +37,15 @@ class CommandHandler:
             except Exception as e:
                 self.logger.error(f"Error retrieving Wikipedia summary. {e}")
                 return "Could not retrieve Wikipedia summary."
+        elif intent == "math_query":
+            try:
+                eval_result = eval(text.replace("what'", "").strip())
+                self.logger.info(f"Math query result: {eval_result}")
+                return f"The result of your math query is: {eval_result}"
+            except Exception as e:
+                self.logger.error(f"Error evaluating math query: {e}")
+                return "Could not evaluate the math query."
+        elif intent == "unknown":
+            return "Sorry, I didn't understand that command."
         else:
             return "Sorry, I don't understand that command."
